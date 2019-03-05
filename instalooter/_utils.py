@@ -63,6 +63,11 @@ class NameGenerator(object):
         ext = ext or ("mp4" if media['is_video'] else "jpg")
         return os.path.extsep.join([self.base(media), ext])
 
+    def file_json(self, media, ext=None):
+        # type: (Mapping[Text, Any], Optional[Text]) -> Text
+        ext = 'json'
+        return os.path.extsep.join([self.base(media), ext])
+
     def needs_extended(self, media):
         # type: (Mapping[Text, Any]) -> bool
         try:

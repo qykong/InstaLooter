@@ -26,7 +26,7 @@ from . import __author__, __name__ as __appname__, __version__
 from ._impl import length_hint, json
 from ._utils import NameGenerator, CachedClassProperty, get_shared_data
 from .medias import TimedMediasIterator, MediasIterator
-from .pages import ProfileIterator, HashtagIterator
+from .pages import ProfileIterator, HashtagIterator, CommentIterator
 from .pbar import ProgressBar
 from .worker import InstaDownloader
 
@@ -338,7 +338,18 @@ class InstaLooter(object):
         url = "https://www.instagram.com/p/{}/".format(code)
         with self.session.get(url) as res:
             data = get_shared_data(res.text)
-            return data['entry_data']['PostPage'][0]['graphql']['shortcode_media']
+            # hack to get all comments starts here ---- Quyu
+            post = data['entry_data']['PostPage'][0]['graphql']['shortcode_media']
+            if post['edge_media_to_comment']['page_info']['has_next_page']:
+                iters = CommentIterator(code, self.session, self.rhx, post['edge_media_to_comment']['page_info']['end_cursor'], len(post['edge_media_to_comment']['edges']))
+                new_comments = list(iters)
+                for comments in new_comments:
+                    if not comments['edge_media_to_comment']['page_info']['has_next_page']:
+                        post['edge_media_to_comment']['count'] = comments['edge_media_to_comment']['count']
+                    post['edge_media_to_comment']['edges'] = post['edge_media_to_comment']['edges'] + comments['edge_media_to_comment']['edges']
+
+            del post['edge_media_to_comment']['page_info']
+            return post
 
     def download_pictures(self,
                           destination,       # type: Union[str, fs.base.FS]
@@ -601,10 +612,22 @@ class InstaLooter(object):
 
         # Queue all media filling the condition
         medias_queued = 0
+        count = 0
         for media in six.moves.filter(_condition, medias_iter):
 
+            # Check that the file does not exist
+            # FIXME: not working well with sidecar
+            if new_only and destination.exists(self.namegen.file_json(media)):
+                count += 1
+                if media_count is not None and count >= media_count:
+                    break
+                else:
+                    continue
+
             # Check if the whole post info is required
-            if self.namegen.needs_extended(media) or media["__typename"] != "GraphImage":
+            # if self.namegen.needs_extended(media) or media["__typename"] != "GraphImage":
+            if True:
+                # a hack to force loading all information
                 media = self.get_post_info(media['shortcode'])
 
             # Check that sidecar children fit the condition
@@ -618,16 +641,12 @@ class InstaLooter(object):
                 if not media['edge_sidecar_to_children']['edges']:
                     continue
 
-            # Check that the file does not exist
-            # FIXME: not working well with sidecar
-            if new_only and destination.exists(self.namegen.file(media)):
-                break
-
             # Put the medias in the queue
             queue.put(media)
             medias_queued += 1
+            count += 1
 
-            if media_count is not None and medias_queued >= media_count:
+            if media_count is not None and count >= media_count:
                 break
 
         return medias_queued

@@ -139,6 +139,28 @@ class HashtagIterator(PageIterator):
             "after": cursor
         }
 
+class CommentIterator(PageIterator):
+    """An iterator over the pages refering to a specific hashtag.
+    """
+
+    _QUERY_HASH = "f0986789a5c5d17c2400faebf16efd0d"
+    _URL = "{}?query_hash={}&variables={{}}".format(PageIterator._BASE_URL, _QUERY_HASH)
+    _section_generic = "shortcode_media"
+    _section_media = "edge_media_to_comment"
+
+    def __init__(self, short_code, session, rhx, cursor, page_size):
+        super(CommentIterator, self).__init__(session, rhx)
+        self.short_code = short_code
+        self._cursor = cursor
+        self.PAGE_SIZE = page_size
+
+    def _getparams(self, cursor):
+        return {
+            "shortcode": self.short_code,
+            "first": self.PAGE_SIZE,
+            "after": cursor
+        }
+
 
 class ProfileIterator(PageIterator):
     """An iterator over the pages of a user profile.
