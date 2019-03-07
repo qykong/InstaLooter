@@ -94,3 +94,10 @@ ENV/
 
 # MyPy
 .mypy_cache
+
+# PyCharm project
+.idea
+*.pyc
+
+# MacOS system
+*.DS_Store
