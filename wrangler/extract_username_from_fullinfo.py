@@ -18,6 +18,7 @@ def main():
             session_username_set.add(line.rstrip())
 
     network_edge_file = open('../data/source_target.csv', 'w')
+    network_edge_file.write('Source,Target\n')
 
     for dir_path in ['../data/FormattedCommonUserFullInfo', '../data/FormattedNormalUserFullInfo']:
         for subdir, _, files in os.walk(dir_path):

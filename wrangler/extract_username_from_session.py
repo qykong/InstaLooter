@@ -4,11 +4,12 @@
 """ Extract seed username from sessions_metadata.csv.
 """
 
+import re
 import pandas as pd
 
 
 def remove_decorator(text):
-    return text[text.find('>') + 1: text.find('<', 2) - 2]
+    return re.sub('<.*?>', '', text).strip()
 
 
 def main():
