@@ -30,12 +30,12 @@ import pandas as pd
 def extract_comment_triplet(block):
     if block == 'empety':
         return None
-    comment_text = block[block.find('</font>') + 7: block.find('(created_at')]
+    comment_text = block[block.find('</font>') + 7: block.find('(created')]
     # remove http url
     comment_text = re.sub(r'http\S+', '', comment_text).strip()
     return (block[block.find('>') + 1: block.find('</font>')],
-            comment_text,
-            block[block.find('(created_at') + 12: -1])
+            remove_decorator(comment_text),
+            block[block.find('(created') + 12: -1])
 
 
 def remove_decorator(text):
