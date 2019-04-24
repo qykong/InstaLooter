@@ -15,8 +15,8 @@ def text_preprocess(text):
 
 
 def main():
-    with open('../data/texts_for_tagging.tsv', 'w', encoding='utf-8') as fout:
-        with open('../data/full_sessions_2218.json', 'r', encoding='utf-8') as fin:
+    with open('../data/ig_texts_for_tagging.tsv', 'w', encoding='utf-8') as fout:
+        with open('../data/ig_full_sessions_2218.json', 'r', encoding='utf-8') as fin:
             for line in fin:
                 session_json = json.loads(line.rstrip())
                 unit_id = session_json['unit_id']

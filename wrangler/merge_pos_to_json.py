@@ -11,11 +11,11 @@ def flatten(x):
 
 
 def main():
-    with open('../data/full_sessions_pos_2218.json', 'w') as fout:
+    with open('../data/vine_full_sessions_pos_970.json', 'w') as fout:
         pos_tag_stat = []
         unit_id_set = set()
 
-        with open('../data/pos_tag_results.tsv', 'r') as fin1:
+        with open('../data/vine_pos_tag_results.tsv', 'r') as fin1:
             for line in fin1:
                 processed_text, pos, conf, id, _ = line.rstrip().split('\t')
                 pos_tag_stat.extend(pos.split())
@@ -43,7 +43,7 @@ def main():
         print('len of semantic feature space (bigram+trigram)', len(all_tags))
 
         unit_id_semantic_features = {id: [0] * len(all_tags) for id in unit_id_set}
-        with open('../data/pos_tag_results.tsv', 'r') as fin1:
+        with open('../data/vine_pos_tag_results.tsv', 'r') as fin1:
             for line in fin1:
                 processed_text, pos, conf, id, _ = line.rstrip().split('\t')
                 if '_' in id:
@@ -73,7 +73,7 @@ def main():
                 zero_col_idx.append(col_idx)
 
         non_zero_tags = [tag for idx, tag in enumerate(all_tags) if idx not in zero_col_idx]
-        with open('../data/non_zero_tags.txt', 'w') as fout2:
+        with open('../data/vine_non_zero_tags.txt', 'w') as fout2:
             for row_idx, tag in enumerate(non_zero_tags):
                 fout2.write('{0} {1}\n'.format(row_idx, tag))
         non_zero_tags_idx_dict = {tag: idx for idx, tag in enumerate(non_zero_tags)}
@@ -81,7 +81,7 @@ def main():
 
         # reload the feature space because it's faster
         unit_id_semantic_features = {id: [0] * len(non_zero_tags) for id in unit_id_set}
-        with open('../data/pos_tag_results.tsv', 'r') as fin1:
+        with open('../data/vine_pos_tag_results.tsv', 'r') as fin1:
             for line in fin1:
                 processed_text, pos, conf, id, _ = line.rstrip().split('\t')
                 if '_' in id:
@@ -103,7 +103,7 @@ def main():
                         if ft in non_zero_tags:
                             unit_id_semantic_features[id][non_zero_tags_idx_dict[ft]] += 1
 
-        with open('../data/full_sessions_2218.json', 'r') as fin2:
+        with open('../data/vine_full_sessions_970.json', 'r') as fin2:
             for line in fin2:
                 session_json = json.loads(line.rstrip())
                 unit_id = int(session_json['unit_id'])

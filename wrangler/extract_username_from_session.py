@@ -22,7 +22,7 @@ def main():
         data_usernames = set(map(remove_decorator, list(data['owner_id'].values)))
         username_set.update(data_usernames)
 
-    with open('../data/session_username.txt', 'w') as fout:
+    with open('../data/ig_session_username.txt', 'w') as fout:
         for username in username_set:
             fout.write('{0}\n'.format(username))
 

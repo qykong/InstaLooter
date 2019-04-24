@@ -8,16 +8,16 @@ import os, json
 
 
 def main():
-    fout = open('../data/fullinfo_username.txt', 'w')
+    fout = open('../data/ig_fullinfo_username.txt', 'w')
     session_username_set = set()
     visited_username_set = set()
     written_username_set = set()
 
-    with open('../data/session_username.txt', 'r') as fin:
+    with open('../data/ig_session_username.txt', 'r') as fin:
         for line in fin:
             session_username_set.add(line.rstrip())
 
-    network_edge_file = open('../data/source_target.csv', 'w')
+    network_edge_file = open('../data/ig_source_target.csv', 'w')
     network_edge_file.write('Source,Target\n')
 
     for dir_path in ['../data/FormattedCommonUserFullInfo', '../data/FormattedNormalUserFullInfo']:
