@@ -1,6 +1,6 @@
 $TYPE template
 $XDIM 2
-$YDIM 970
+$YDIM 776
 $VEC_DIM 2845
 0 DD
 1 D$
