@@ -10,7 +10,7 @@ from instalooter.cli import main
 
 def usage():
     return '''
-        python run_example.py user chuuu_0908 ./output -t 2018-12-31:2018-01-01 -n 25 -D -e --traceback -N
+        python run_example.py user carsandgu ./output -t 2018-12-31:2018-01-01 -n 25 -D -e --traceback -N
     '''
 
 

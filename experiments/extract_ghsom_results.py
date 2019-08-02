@@ -182,6 +182,6 @@ def main():
 if __name__ == '__main__':
     XDIM = 16
     YDIM = 16
-    cls_prefix = 'vine'
+    cls_prefix = 'ig'
 
     main()

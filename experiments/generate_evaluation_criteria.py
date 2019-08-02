@@ -90,11 +90,10 @@ def main():
 
 
 if __name__ == '__main__':
-    cls_prefix = 'vine'
+    cls_prefix = 'ig'
     if cls_prefix == 'ig':
         print('Experimental results for Instagram')
     elif cls_prefix == 'vine':
         print('Experimental results for Vine')
-
 
     main()
