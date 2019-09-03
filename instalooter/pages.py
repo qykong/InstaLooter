@@ -59,6 +59,7 @@ class PageIterator(typing.Iterator[typing.Dict[typing.Text, typing.Any]]):
             cursor = self._cursor
             # Query data
             try:
+                time.sleep(10)
                 # Prepare the query
                 params = self._getparams(cursor)
                 json_params = json.dumps(params, separators=(',', ':'))
